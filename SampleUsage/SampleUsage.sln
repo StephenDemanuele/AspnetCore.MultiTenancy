@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleUsage", "SampleUsage\SampleUsage.csproj", "{82CDEA48-1758-4D72-B0B0-4362561676B6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.ServiceCollection.MultiTenancy", "..\AspnetCore.ServiceCollection.MultiTenancy\AspnetCore.ServiceCollection.MultiTenancy.csproj", "{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{B7904677-7B7C-4281-B28F-51994884F220}"
+	ProjectSection(SolutionItems) = preProject
+		ChangeLog.md = ChangeLog.md
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82CDEA48-1758-4D72-B0B0-4362561676B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82CDEA48-1758-4D72-B0B0-4362561676B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82CDEA48-1758-4D72-B0B0-4362561676B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82CDEA48-1758-4D72-B0B0-4362561676B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {6C48F76A-6631-4095-9444-6DCB86B4257D}
+	EndGlobalSection
+EndGlobal
