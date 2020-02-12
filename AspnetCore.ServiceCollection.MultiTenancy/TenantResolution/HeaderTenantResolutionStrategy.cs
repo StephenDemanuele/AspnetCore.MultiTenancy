@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using System.Runtime.CompilerServices;
 
+[assembly: InternalsVisibleTo("AspnetCore.ServiceCollection.MultiTenancy.UnitTests")]
 namespace AspnetCore.ServiceCollection.MultiTenancy.TenantResolution
 {
 	internal class HeaderTenantResolutionStrategy : ITenantResolutionStrategy

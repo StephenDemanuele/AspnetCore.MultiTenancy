@@ -13,6 +13,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionIt
 		ReadMe.md = ReadMe.md
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AspnetCore.ServiceCollection.MultiTenancy.UnitTests", "AspnetCore.ServiceCollection.MultiTenancy.UnitTests\AspnetCore.ServiceCollection.MultiTenancy.UnitTests.csproj", "{269D5283-75DB-4D58-991E-47112FE293CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0D8CA5E6-EA1C-49E0-828A-4BACF49D5313}.Release|Any CPU.Build.0 = Release|Any CPU
+		{269D5283-75DB-4D58-991E-47112FE293CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{269D5283-75DB-4D58-991E-47112FE293CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{269D5283-75DB-4D58-991E-47112FE293CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{269D5283-75DB-4D58-991E-47112FE293CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
