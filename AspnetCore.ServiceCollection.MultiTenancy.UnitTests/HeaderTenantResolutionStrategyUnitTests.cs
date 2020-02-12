@@ -14,7 +14,6 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.UnitTests
 		private Mock<IHttpContextAccessor> _mockHttpContextAccessor;
 		private ITenantProvider _tenantProvider ;
 
-
 		public HeaderTenantResolutionStrategyUnitTests()
 		{
 			_tenantProvider = new MockTenantProvider();

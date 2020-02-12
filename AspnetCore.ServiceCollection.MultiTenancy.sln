@@ -9,6 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SampleUsage", "SampleUsage\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspnetCore.ServiceCollection.MultiTenancy.UnitTests", "AspnetCore.ServiceCollection.MultiTenancy.UnitTests\AspnetCore.ServiceCollection.MultiTenancy.UnitTests.csproj", "{D9E20782-FFCD-4694-A727-6F5F9A3DA036}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{92BE39E9-86B0-47E7-8D9A-BC10F8BCA65E}"
+	ProjectSection(SolutionItems) = preProject
+		ChangeLog.md = ChangeLog.md
+		LICENSE = LICENSE
+		ReadMe.md = ReadMe.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
