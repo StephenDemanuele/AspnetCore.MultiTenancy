@@ -16,4 +16,4 @@ jobs:
     - name: Build with dotnet
       run: dotnet build --configuration Release
     - name: Run tests
-    run: dotnet test ./AspnetCore.ServiceCollection.MultiTenancy.sln --configuration Release
+    run: dotnet test
