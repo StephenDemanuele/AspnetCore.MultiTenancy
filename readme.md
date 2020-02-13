@@ -67,7 +67,7 @@ Which is then used in
 ```
 6. In `Configure` function, add 
 ```cs
-	app.UseTenantMiddleware();
+    app.UseTenantMiddleware();
 ```
 7. Each request must have a header having key: `tenantId`, and value(integer) is the Id of a tenant used during service registration.
 
