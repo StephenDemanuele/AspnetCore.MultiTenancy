@@ -22,22 +22,53 @@ This library lets you do just that.
 
 ## Getting started
 
-1. Create an implmentation of  `ITenant`.
+1. Install package (publish package, todo)
+
+2. Create an implmentation of  `ITenant`.
 The simplest one will be:
 
-```public class Tenant : ITenant 
-```{
-        ```public Tenant(int id) => Id = id;
+```cs
+public class Tenant : ITenant 
+{
+	public Tenant(int id) => Id = id;
 
-		```public int Id { get; }
-```}
+	public int Id { get; }
+}
+```
 
-2. Create an implementation of `ITenantProvider`.
+3. Create an implementation of `ITenantProvider`.
 Such as
 
-```public class DefaultTenantProvider : ITenantProvider
-```{
-```		public ITenant Get(int tenantId) => new Tenant(tenantId);
-```	}
+```cs
+public class DefaultTenantProvider : ITenantProvider
+{
+	public ITenant Get(int tenantId) => new Tenant(tenantId);
+}
+```
+3. Your tenant mechanism now comes into play. In the `ConfigureServices` function, you need to add `services.AddMultiTenancy(..)`,
+   but this call needs a collection of `ITenant`. So first create a collection instance of your application's tenants.
+   In `SampleUsage.Startup', you'll see:
+ 
+ ```cs
+ var tenants = new List<ITenant>
+	{
+		new Tenant(1),
+		new Tenant(2)
+	};
+```
+	Which is then used in 
+	```cs
+	services.AddMultiTenancy(tenants);
+	```
+4. This is where your tenant-specific bootstrapping logic comes in. Using the `serviceCollection`, register dependencies as follow:
+```cs
+	serviceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
+	//where tenant is an instance of a type deriving from ITenant
+```
+5. In `Configure` function, add 
+```cs
+	app.UseTenantMiddleware();
+```
+6. Each request must have a header having key: `tenantId`, and value(integer) is the Id of a tenant used during service registration.
 
-3. 
+All this is demonstrated in project SampleUsage.
