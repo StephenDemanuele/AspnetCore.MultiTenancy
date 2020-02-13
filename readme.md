@@ -30,9 +30,9 @@ The simplest one will be:
 ```cs
 public class Tenant : ITenant 
 {
-  public Tenant(int id) => Id = id;
+    public Tenant(int id) => Id = id;
 
-  public int Id { get; }
+    public int Id { get; }
 }
 ```
 
@@ -42,26 +42,26 @@ Such as
 ```cs
 public class DefaultTenantProvider : ITenantProvider
 {
-  public ITenant Get(int tenantId) => new Tenant(tenantId);
+    public ITenant Get(int tenantId) => new Tenant(tenantId);
 }
 ```
 4. Your tenant mechanism now comes into play. In the `ConfigureServices` function, you need to add `services.AddMultiTenancy(..)`,
    but this call needs a collection of `ITenant`. So first create a collection instance of your application's tenants.
-   In `SampleUsage.Startup', you'll see:
+   In `SampleUsage.Startup`, you'll see:
  ```cs
- var tenants = new List<ITenant>
-	{
-		new Tenant(1),
-		new Tenant(2)
-	};
+var tenants = new List<ITenant>
+{
+    new Tenant(1),
+    new Tenant(2)
+};
 ```
 	Which is then used in 
-	```cs
-	services.AddMultiTenancy(tenants);
-	```
+```cs
+    services.AddMultiTenancy(tenants);
+```
 5. This is where your tenant-specific bootstrapping logic comes in. Using the `serviceCollection`, register dependencies as follow:
 ```cs
-	serviceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
+    serviceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
 	//where tenant is an instance of a type deriving from ITenant
 ```
 6. In `Configure` function, add 
