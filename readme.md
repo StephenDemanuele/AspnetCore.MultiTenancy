@@ -55,14 +55,15 @@ var tenants = new List<ITenant>
     new Tenant(2)
 };
 ```
-	Which is then used in 
+Which is then used in 
 ```cs
     services.AddMultiTenancy(tenants);
 ```
 5. This is where your tenant-specific bootstrapping logic comes in. Using the `serviceCollection`, register dependencies as follow:
 ```cs
-    serviceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
-	//where tenant is an instance of a type deriving from ITenant
+    serviceCollection.AddTenantScoped(tenant1, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
+    serviceCollection.AddTenantScoped(tenant2, typeof(IFooService), typeof(SpecialFooService), ServiceLifetime.Scoped);
+    //where tenant1 and tenant2 are instances of a type deriving from ITenant
 ```
 6. In `Configure` function, add 
 ```cs
