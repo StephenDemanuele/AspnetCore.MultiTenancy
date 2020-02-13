@@ -8,9 +8,9 @@ Your web app/api is used by more than 1 "tenant", or rather, your app/api needs 
 
 
 Eg.1
-A controller/service depends on `IFooService` to do its thing. But Tenant1 needs it done one way, but Tenant2 needs it done a different way. You could :
+A controller/service depends on `IFooService` to do its thing. But Tenant1 needs `IFooService` to work in a specific manner, but Tenant2 needs this done differently. You could :
 1. Define `IFooService1` and `IFooService2` both of which inherit `IFooService`
-2. Implment new types differently, as the tenants required
+2. Implment new types differently, as the tenants require.
 3. Create a factory to instantiate the type you need at runtime, as determined by the request's tenant
 
 This is quite involved, and is not the best use of dependency injection.
@@ -30,9 +30,9 @@ The simplest one will be:
 ```cs
 public class Tenant : ITenant 
 {
-	public Tenant(int id) => Id = id;
+  public Tenant(int id) => Id = id;
 
-	public int Id { get; }
+  public int Id { get; }
 }
 ```
 
@@ -42,13 +42,12 @@ Such as
 ```cs
 public class DefaultTenantProvider : ITenantProvider
 {
-	public ITenant Get(int tenantId) => new Tenant(tenantId);
+  public ITenant Get(int tenantId) => new Tenant(tenantId);
 }
 ```
-3. Your tenant mechanism now comes into play. In the `ConfigureServices` function, you need to add `services.AddMultiTenancy(..)`,
+4. Your tenant mechanism now comes into play. In the `ConfigureServices` function, you need to add `services.AddMultiTenancy(..)`,
    but this call needs a collection of `ITenant`. So first create a collection instance of your application's tenants.
    In `SampleUsage.Startup', you'll see:
- 
  ```cs
  var tenants = new List<ITenant>
 	{
@@ -60,15 +59,15 @@ public class DefaultTenantProvider : ITenantProvider
 	```cs
 	services.AddMultiTenancy(tenants);
 	```
-4. This is where your tenant-specific bootstrapping logic comes in. Using the `serviceCollection`, register dependencies as follow:
+5. This is where your tenant-specific bootstrapping logic comes in. Using the `serviceCollection`, register dependencies as follow:
 ```cs
 	serviceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
 	//where tenant is an instance of a type deriving from ITenant
 ```
-5. In `Configure` function, add 
+6. In `Configure` function, add 
 ```cs
 	app.UseTenantMiddleware();
 ```
-6. Each request must have a header having key: `tenantId`, and value(integer) is the Id of a tenant used during service registration.
+7. Each request must have a header having key: `tenantId`, and value(integer) is the Id of a tenant used during service registration.
 
 All this is demonstrated in project SampleUsage.
