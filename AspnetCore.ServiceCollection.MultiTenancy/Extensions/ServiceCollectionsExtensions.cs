@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using AspnetCore.ServiceCollection.MultiTenancy.TenantResolution;
+using AspnetCore.ServiceCollection.MultiTenancy.Builder;
 
 namespace AspnetCore.ServiceCollection.MultiTenancy.Extensions
 {
@@ -15,6 +16,7 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.Extensions
 			serviceCollection.AddHttpContextAccessor();
 			serviceCollection.AddSingleton(tenants);
 			serviceCollection.AddSingleton(serviceCollection);
+			serviceCollection.AddSingleton<ContainerBuilder>();
 
 			if (tenantResolutionStrategy == null)
 			{

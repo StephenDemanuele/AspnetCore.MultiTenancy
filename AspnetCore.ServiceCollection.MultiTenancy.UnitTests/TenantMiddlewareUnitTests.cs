@@ -1,16 +1,15 @@
-﻿using AspnetCore.ServiceCollection.MultiTenancy.Extensions;
+﻿using Moq;
+using Xunit;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using AspnetCore.ServiceCollection.MultiTenancy.Builder;
+using AspnetCore.ServiceCollection.MultiTenancy.Extensions;
 using AspnetCore.ServiceCollection.MultiTenancy.Middleware;
 using AspnetCore.ServiceCollection.MultiTenancy.TenantResolution;
 using AspnetCore.ServiceCollection.MultiTenancy.UnitTests.Stubs;
 using AspnetCore.ServiceCollection.MultiTenancy.UnitTests.Stubs.Services;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Xunit;
 
 namespace AspnetCore.ServiceCollection.MultiTenancy.UnitTests
 {
@@ -68,8 +67,7 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.UnitTests
 				foo = "executed";
 				return Task.CompletedTask;
 			},
-			_tenants,
-			serviceCollection);
+			new ContainerBuilder(_tenants, serviceCollection));
 
 			await sut.Invoke(mockHttpContextAccessor.Object.HttpContext);
 			Assert.Equal("executed", foo);
@@ -82,10 +80,9 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.UnitTests
 			var mockHttpContextAccessor = new Mock<IHttpContextAccessor>();
 			var mockHttpRequest = new Mock<HttpRequest>();
 			mockHttpRequest.Setup(_ => _.Headers)
-				.Returns(new HeaderDictionary { { "tenantId", "1" } });
+				.Returns(new HeaderDictionary { { "tenantId", "2" } });
 			mockHttpContextAccessor.Setup(x => x.HttpContext.Request)
 				.Returns(mockHttpRequest.Object);
-
 
 			//setup serviceCollection
 			var masterServiceCollection = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
@@ -93,9 +90,9 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.UnitTests
 			foreach (var tenant in _tenants)
 			{
 				if (tenant.Id == 1)
-					masterServiceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
-				else
 					masterServiceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(SpecialFooService), ServiceLifetime.Scoped);
+				else
+					masterServiceCollection.AddTenantScoped(tenant, typeof(IFooService), typeof(DefaultFooService), ServiceLifetime.Scoped);
 
 				//this singleton is tenant scoped.
 				//there will be a singleton for each tenant
@@ -112,14 +109,13 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.UnitTests
 
 			var sut = new TenantMiddleware(next: (innerHttpContext) =>
 			{
-				var fooService =  innerHttpContext.RequestServices.GetService<IFooService>();
+				var fooService = innerHttpContext.RequestServices.GetService<IFooService>();
 				Assert.NotNull(fooService);
 				Assert.IsType<DefaultFooService>(fooService);
 
 				return Task.CompletedTask;
 			},
-			_tenants,
-			masterServiceCollection);
+			new ContainerBuilder(_tenants, masterServiceCollection));
 
 			await sut.Invoke(mockHttpContextAccessor.Object.HttpContext);
 		}

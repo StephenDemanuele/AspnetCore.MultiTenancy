@@ -1,67 +1,23 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using AspnetCore.ServiceCollection.MultiTenancy.Builder;
 using AspnetCore.ServiceCollection.MultiTenancy.TenantResolution;
 
 namespace AspnetCore.ServiceCollection.MultiTenancy.Middleware
 {
-	public class TenantMiddleware
+	internal class TenantMiddleware
 	{
-		private readonly RequestDelegate next;
+		private readonly RequestDelegate _next;
 
-		private ConcurrentDictionary<int, IServiceProvider> Containers;
+		private ConcurrentDictionary<int, IServiceProvider> Containers = new ConcurrentDictionary<int, IServiceProvider>();
 
-		public TenantMiddleware(
-			RequestDelegate next, 
-			IEnumerable<ITenant> tenants, 
-			IServiceCollection masterServiceCollection)
+		public TenantMiddleware(RequestDelegate next, ContainerBuilder containerBuilder)
 		{
-			this.next = next;
-			Containers = new ConcurrentDictionary<int, IServiceProvider>();
-
-			using (var scope = masterServiceCollection.BuildServiceProvider().CreateScope())
-			{
-				foreach (var tenant in tenants)
-				{
-					var tenantServiceCollection = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
-					//get registrations set for the specific tenant
-					var tenantScopedServiceDescriptors = masterServiceCollection
-						.Where(x => x is TenantScopedServiceDescriptor scopedServiceDescriptor && scopedServiceDescriptor.Tenant.Id == tenant.Id)
-						.Select(x => (TenantScopedServiceDescriptor)x);
-
-					foreach (var tenantServiceDescriptor in tenantScopedServiceDescriptors)
-					{
-						tenantServiceCollection.Add(tenantServiceDescriptor);
-					}
-
-					//get registrations which are not tenant scoped
-					var generalScopeServiceDescriptors = masterServiceCollection
-						.Where(x => x is ServiceDescriptor).ToList();
-
-					foreach (var serviceDescriptor in generalScopeServiceDescriptors)
-					{
-						if (serviceDescriptor is TenantScopedServiceDescriptor || serviceDescriptor is IServiceCollection)
-							continue;
-
-						try
-						{
-							var requiredService = scope.ServiceProvider.GetRequiredService(serviceDescriptor.ServiceType);
-							tenantServiceCollection.Add(new ServiceDescriptor(serviceDescriptor.ServiceType, requiredService));
-						}
-						catch
-						{
-							tenantServiceCollection.Add(serviceDescriptor);
-						}
-					}
-
-					Containers.TryAdd(tenant.Id, tenantServiceCollection.BuildServiceProvider());
-				}
-			}
+			_next = next;
+			Containers = containerBuilder.Build();
 		}
 
 		public async Task Invoke(HttpContext context)
@@ -78,8 +34,8 @@ namespace AspnetCore.ServiceCollection.MultiTenancy.Middleware
 			{
 				context.RequestServices = scope.ServiceProvider;
 
-				if (next != null)
-					await next(context);
+				if (_next != null)
+					await _next(context);
 			}
 		}
 	}
